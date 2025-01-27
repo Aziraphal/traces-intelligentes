@@ -1,89 +1,234 @@
-# traces-intelligentes
+# Documentation Traces Intelligentes
 
-Une extension de navigateur qui protège intelligemment votre vie privée en analysant et gérant sélectivement vos traces de navigation.
-🌟 Caractéristiques
+## Guide Utilisateur
 
-Analyse Contextuelle : Détection intelligente des sites importants et fréquents
-Nettoyage Sélectif : Conservation des données utiles tout en supprimant les traces sensibles
-Interface Intuitive : Visualisation simple de vos statistiques de navigation
-Personnalisable : Adaptez les paramètres selon vos besoins
+### Installation et démarrage
+1. **Installation depuis le code source**
+   - Téléchargez le code depuis GitHub
+   - Décompressez le fichier
+   - Dans Chrome, allez dans `chrome://extensions/`
+   - Activez le mode développeur
+   - Cliquez "Charger l'extension non empaquetée"
+   - Sélectionnez le dossier décompressé
 
-📥 Installation
+2. **Configuration initiale**
+   - Cliquez sur l'icône de l'extension
+   - Configurez vos sites importants
+   - Définissez vos préférences de nettoyage
 
-Clonez le dépôt :
+### Utilisation quotidienne
 
-bashCopygit clone https://github.com/votre-nom/traces-intelligentes.git
+1. **Surveillance automatique**
+   - L'extension analyse automatiquement votre navigation
+   - Elle identifie les sites fréquents
+   - Elle détecte les formulaires importants
 
-Ouvrez Chrome et accédez à chrome://extensions/
-Activez le "Mode développeur"
-Cliquez sur "Charger l'extension non empaquetée"
-Sélectionnez le dossier du projet
+2. **Nettoyage intelligent**
+   - Automatique à la fermeture des onglets
+   - Préserve les données importantes
+   - Supprime les traces non essentielles
 
-🔧 Configuration
-Sites importants
-Modifiez background.js pour ajouter vos sites de confiance :
-javascriptCopyconst SITES_IMPORTANTS = {
-  "exemple.com": ["cookies", "formData"],
-  // Ajoutez vos sites ici
-};
-📁 Structure du Projet
-Copytraces-intelligentes/
-├── src/
-│   ├── background.js      # Script principal
-│   ├── popup.html         # Interface utilisateur
-│   ├── popup.js           # Logique de l'interface
-│   └── styles.css         # Styles de l'interface
-├── docs/                  # Documentation
-├── tests/                 # Tests unitaires
-└── manifest.json          # Configuration de l'extension
-🤝 Contribution
-Les contributions sont les bienvenues ! Pour contribuer :
+3. **Statistiques et contrôle**
+   - Visualisez vos statistiques de navigation
+   - Consultez les sites protégés
+   - Effectuez un nettoyage manuel si nécessaire
 
-Forkez le projet
-Créez une branche pour votre fonctionnalité
-Committez vos changements
-Poussez vers la branche
-Ouvrez une Pull Request
+## Guide du Développeur
 
-Guide de Contribution
+### Architecture du projet
 
-Respectez les conventions de code existantes
-Ajoutez des tests pour les nouvelles fonctionnalités
-Mettez à jour la documentation si nécessaire
-Vérifiez que tous les tests passent
+```
+src/
+├── background/
+│   ├── analyzer.js    # Analyse de navigation
+│   ├── cleaner.js     # Logique de nettoyage
+│   └── storage.js     # Gestion du stockage
+├── popup/
+│   ├── components/    # Composants UI
+│   ├── styles/        # Fichiers CSS
+│   └── utils/         # Utilitaires
+└── shared/           # Code partagé
+```
 
-📝 License
-Ce projet est sous licence MIT - voir le fichier LICENSE.md pour plus de détails.
-🛡️ Politique de Confidentialité
-Cette extension :
+### Installation de l'environnement de développement
 
-Ne collecte aucune donnée personnelle
-N'envoie aucune information à des serveurs externes
-Fonctionne entièrement en local sur votre navigateur
-Respecte les principes de "Privacy by Design"
+1. **Prérequis**
+   ```bash
+   node -v  # Vérifiez Node.js >= 14
+   npm -v   # Vérifiez npm >= 6
+   ```
 
-📊 Feuille de Route
-Phase 1 (Current)
+2. **Installation des dépendances**
+   ```bash
+   npm install
+   ```
 
- Fonctionnalités de base
- Interface utilisateur simple
- Tests unitaires complets
- Documentation détaillée
+3. **Lancement en mode développement**
+   ```bash
+   npm run dev
+   ```
 
-Phase 2 (Planned)
+### Guide de contribution
 
- Statistiques avancées
- Plus d'options de personnalisation
- Support de Firefox
- Interface multilingue
+1. **Configuration du projet**
+   ```bash
+   git clone https://github.com/votre-nom/traces-intelligentes.git
+   cd traces-intelligentes
+   npm install
+   ```
 
-❓ FAQ
-Q: L'extension ralentit-elle la navigation ?
-R: Non, l'analyse est optimisée pour avoir un impact minimal sur les performances.
-Q: Mes mots de passe sont-ils conservés ?
-R: Oui, pour les sites que vous marquez comme importants.
-Q: Puis-je restaurer des données effacées ?
-R: Non, le nettoyage est définitif pour garantir votre confidentialité.
+2. **Standards de code**
+   - Utilisez ESLint pour la cohérence du code
+   - Suivez les règles Prettier configurées
+   - Commentez le code en français
+   - Utilisez JSDoc pour la documentation
 
-📞 Support
-Ouvrez une issue pour les bugs
+3. **Tests**
+   ```bash
+   # Lancer tous les tests
+   npm test
+   
+   # Lancer les tests d'un composant spécifique
+   npm test -- --grep "Nom du test"
+   ```
+
+4. **Pull Requests**
+   - Créez une branche par fonctionnalité
+   - Suivez le template de PR fourni
+   - Assurez-vous que les tests passent
+   - Attendez la review d'un mainteneur
+
+### API et Hooks
+
+1. **Analyseur de navigation**
+   ```javascript
+   class NavigationAnalyzer {
+     // Analyse une nouvelle visite
+     analyzeVisit(url, timestamp) { }
+     
+     // Vérifie l'importance d'un site
+     checkImportance(url) { }
+     
+     // Récupère les statistiques
+     getStats() { }
+   }
+   ```
+
+2. **Gestionnaire de nettoyage**
+   ```javascript
+   class CleaningManager {
+     // Configure les règles de nettoyage
+     setRules(rules) { }
+     
+     // Effectue un nettoyage intelligent
+     smartClean(url) { }
+     
+     // Force un nettoyage complet
+     forceClean() { }
+   }
+   ```
+
+### Événements et messages
+
+1. **Communication entre les scripts**
+   ```javascript
+   // Dans background.js
+   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+     if (message.type === 'CLEAN_REQUEST') {
+       // Traitement du nettoyage
+     }
+   });
+   
+   // Dans popup.js
+   chrome.runtime.sendMessage({
+     type: 'CLEAN_REQUEST',
+     data: { /* ... */ }
+   });
+   ```
+
+2. **Écouteurs d'événements**
+   ```javascript
+   // Fermeture d'onglet
+   chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
+     // Logique de nettoyage
+   });
+   
+   // Soumission de formulaire
+   chrome.webNavigation.onCompleted.addListener((details) => {
+     // Analyse du formulaire
+   });
+   ```
+
+### Personnalisation
+
+1. **Configuration des sites**
+   ```javascript
+   const config = {
+     sites: {
+       "exemple.com": {
+         importance: "high",
+         keepData: ["cookies", "forms"]
+       }
+     },
+     rules: {
+       cleanOnClose: true,
+       preserveLogin: true
+     }
+   };
+   ```
+
+2. **Styles personnalisés**
+   ```css
+   /* Dans styles/custom.css */
+   .privacy-monitor {
+     /* Vos styles */
+   }
+   ```
+
+## FAQ Développeurs
+
+### Comment ajouter une nouvelle fonctionnalité ?
+1. Créez une issue décrivant la fonctionnalité
+2. Discutez de l'implémentation dans l'issue
+3. Créez une branche et implémentez
+4. Soumettez une PR avec tests
+
+### Comment déboguer l'extension ?
+1. Utilisez chrome://extensions
+2. Activez "Developer mode"
+3. Cliquez "Inspect views: background page"
+4. Utilisez les outils de développement Chrome
+
+### Comment publier une mise à jour ?
+1. Mettez à jour la version dans manifest.json
+2. Créez un tag git
+3. Générez le build de production
+4. Soumettez au Chrome Web Store
+
+## Sécurité
+
+### Bonnes pratiques
+- Validez toutes les entrées utilisateur
+- Utilisez HTTPS pour les communications
+- Minimisez les permissions requises
+- Suivez le principe du moindre privilège
+
+### Audit de sécurité
+1. Examinez les dépendances régulièrement
+2. Effectuez des tests de pénétration
+3. Vérifiez les bonnes pratiques OWASP
+4. Documentez les problèmes de sécurité
+
+## Support
+
+### Canaux de communication
+- GitHub Issues pour les bugs
+- Discussions GitHub pour l'aide
+- Wiki pour la documentation
+- Email pour le support privé
+
+### Signalement de bugs
+1. Vérifiez les issues existantes
+2. Utilisez le template de bug
+3. Incluez les logs pertinents
+4. Décrivez les étapes de reproduction
