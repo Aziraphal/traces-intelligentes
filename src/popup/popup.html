@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traces Intelligentes</title>
+    <style>
+        body {
+            width: 300px;
+            padding: 15px;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            padding: 10px;
+        }
+        .stats {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        .status {
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 4px;
+        }
+        .status.success {
+            background: #dff0d8;
+            color: #3c763d;
+        }
+        .status.warning {
+            background: #fcf8e3;
+            color: #8a6d3b;
+        }
+        .status.info {
+            background: #d9edf7;
+            color: #31708f;
+        }
+        .stats-detail {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Traces Intelligentes</h2>
+        
+        <div class="stats">
+            <p>Sites protégés : <span id="protectedSites">0</span></p>
+            <p>Traces nettoyées : <span id="cleanedTraces">0</span></p>
+        </div>
+
+        <button id="cleanNow">Nettoyer maintenant</button>
+        <button id="viewStats">Voir les statistiques</button>
+        <button id="settings">Paramètres</button>
+
+        <div id="status" class="status"></div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Fond circulaire -->
+  <circle cx="64" cy="64" r="60" fill="#4CAF50"/>
+  
+  <!-- Bouclier stylisé -->
+  <path d="M64 24 
+           C64 24 34 36 34 36 
+           C34 58 44 94 64 104
+           C84 94 94 58 94 36
+           C94 36 64 24 64 24Z" 
+        fill="white" 
+        stroke="#388E3C" 
+        stroke-width="4"/>
+  
+  <!-- Œil stylisé -->
+  <circle cx="64" cy="54" r="12" fill="#388E3C"/>
+  <circle cx="64" cy="54" r="6" fill="white"/>
+  
+  <!-- Lignes de confidentialité -->
+  <path d="M52 74 C58 84 70 84 76 74" 
+        fill="none" 
+        stroke="#388E3C" 
+        stroke-width="4" 
+        stroke-linecap="round"/>
+</svg>
