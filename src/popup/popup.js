@@ -12,6 +12,7 @@ class PopupManager {
         this.statsButton = document.getElementById('viewStats');
         this.settingsButton = document.getElementById('settings');
         this.statusDiv = document.getElementById('status');
+        this.loadingDiv = document.getElementById('loading'); // Ajout du chargement
         this.protectedSitesSpan = document.getElementById('protectedSites');
         this.cleanedTracesSpan = document.getElementById('cleanedTraces');
     }
@@ -30,11 +31,7 @@ class PopupManager {
             if (stats && stats.stats) {
                 this.updateStatsDisplay(stats.stats);
             } else {
-                // Si pas de stats, initialiser avec des valeurs par défaut
-                const defaultStats = {
-                    protectedSites: 0,
-                    cleanedTraces: 0
-                };
+                const defaultStats = { protectedSites: 0, cleanedTraces: 0 };
                 await chrome.storage.local.set({ stats: defaultStats });
                 this.updateStatsDisplay(defaultStats);
             }
@@ -46,32 +43,39 @@ class PopupManager {
 
     // Met à jour l'affichage des statistiques
     updateStatsDisplay(stats) {
-        if (this.protectedSitesSpan) {
-            this.protectedSitesSpan.textContent = stats.protectedSites || 0;
-        }
-        if (this.cleanedTracesSpan) {
-            this.cleanedTracesSpan.textContent = stats.cleanedTraces || 0;
-        }
+        this.protectedSitesSpan.textContent = stats.protectedSites || 0;
+        this.cleanedTracesSpan.textContent = stats.cleanedTraces || 0;
     }
 
-    // Gère le nettoyage
+    // Gère le nettoyage avec gestion des erreurs
     async handleClean() {
         try {
             this.cleanButton.disabled = true;
+            this.loadingDiv.style.display = "block"; // Afficher l'indicateur de chargement
             this.showStatus('Nettoyage en cours...', 'info');
 
-            const result = await chrome.runtime.sendMessage({
-                action: 'cleanTraces'
+            let timeout = setTimeout(() => {
+                this.loadingDiv.style.display = "none";
+                this.showStatus("Le nettoyage prend plus de temps que prévu...", "warning");
+            }, 5000); // Timeout après 5 secondes
+
+            // Envoi de la requête au background
+            const result = await new Promise((resolve) => {
+                chrome.runtime.sendMessage({ action: 'cleanTraces' }, resolve);
             });
 
+            clearTimeout(timeout); // Annuler le timeout
+
+            this.loadingDiv.style.display = "none"; // Masquer l'indicateur de chargement
+
             if (result && result.success) {
-                this.showStatus('Nettoyage terminé avec succès !', 'success');
-                await this.loadStats(); // Recharge les statistiques
+                this.showStatus(`Nettoyage terminé ! Traces nettoyées : ${result.cleanedTraces}`, 'success');
+                await this.loadStats(); // Mettre à jour l'affichage des stats
             } else {
                 throw new Error(result ? result.error : 'Erreur inconnue');
             }
         } catch (error) {
-            this.showStatus('Erreur lors du nettoyage : ' + error.message, 'warning');
+            this.showStatus(`Erreur lors du nettoyage : ${error.message}`, 'warning');
         } finally {
             this.cleanButton.disabled = false;
         }
@@ -80,12 +84,12 @@ class PopupManager {
     // Gère l'affichage des statistiques détaillées
     async handleViewStats() {
         try {
-            const result = await chrome.runtime.sendMessage({
-                action: 'getDetailedStats'
+            const result = await new Promise((resolve) => {
+                chrome.runtime.sendMessage({ action: 'getDetailedStats' }, resolve);
             });
 
             if (result) {
-                const statsHtml = `
+                this.statusDiv.innerHTML = `
                     <div class="stats-detail">
                         <p>Cookies supprimés : ${result.cookiesRemoved || 0}</p>
                         <p>Cache nettoyé : ${result.cacheCleared || 0}</p>
@@ -93,12 +97,11 @@ class PopupManager {
                         ${result.lastCleanup ? `<p>Dernier nettoyage : ${new Date(result.lastCleanup).toLocaleString()}</p>` : ''}
                     </div>
                 `;
-                this.statusDiv.innerHTML = statsHtml;
             } else {
                 throw new Error('Pas de statistiques disponibles');
             }
         } catch (error) {
-            this.showStatus('Erreur : ' + error.message, 'warning');
+            this.showStatus(`Erreur : ${error.message}`, 'warning');
         }
     }
 
@@ -113,18 +116,16 @@ class PopupManager {
 
     // Affiche un message de statut
     showStatus(message, type = 'info') {
-        if (this.statusDiv) {
-            this.statusDiv.textContent = message;
-            this.statusDiv.className = 'status ' + type;
-            
-            if (type === 'success') {
-                setTimeout(() => {
-                    if (this.statusDiv) {
-                        this.statusDiv.textContent = '';
-                        this.statusDiv.className = 'status';
-                    }
-                }, 3000);
-            }
+        this.statusDiv.textContent = message;
+        this.statusDiv.className = `status ${type}`;
+        this.statusDiv.style.display = "block";
+
+        if (type === 'success') {
+            setTimeout(() => {
+                this.statusDiv.textContent = '';
+                this.statusDiv.className = 'status';
+                this.statusDiv.style.display = "none";
+            }, 3000);
         }
     }
 }

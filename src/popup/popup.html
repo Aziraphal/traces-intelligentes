@@ -40,24 +40,25 @@
             margin-top: 10px;
             padding: 8px;
             border-radius: 4px;
+            display: none; /* Masqué par défaut */
         }
         .status.success {
             background: #dff0d8;
             color: #3c763d;
+            display: block;
         }
         .status.warning {
             background: #fcf8e3;
             color: #8a6d3b;
+            display: block;
         }
         .status.info {
             background: #d9edf7;
             color: #31708f;
+            display: block;
         }
-        .stats-detail {
-            margin-top: 10px;
-            padding: 10px;
-            background: #f9f9f9;
-            border-radius: 4px;
+        #loading {
+            display: none;
         }
     </style>
 </head>
@@ -72,10 +73,44 @@
 
         <button id="cleanNow">Nettoyer maintenant</button>
         <button id="viewStats">Voir les statistiques</button>
-        <button id="settings">Paramètres</button>
+        <div id="loading" class="status info">Nettoyage en cours...</div>
 
+        <!-- Indicateur de chargement -->
+    
+        <!-- Zone pour afficher les erreurs ou messages de statut -->
         <div id="status" class="status"></div>
     </div>
-    <script src="popup.js"></script>
+
+    <script>
+        document.getElementById("cleanNow").addEventListener("click", () => {
+            const statusElement = document.getElementById("status");
+            const loadingElement = document.getElementById("loading");
+
+            // Réinitialisation des messages
+            statusElement.style.display = "none";
+            loadingElement.style.display = "block"; // Afficher l'indicateur de chargement
+
+            let timeout = setTimeout(() => {
+                loadingElement.style.display = "none"; // Masquer l'indicateur de chargement
+                statusElement.className = "status warning";
+                statusElement.innerHTML = "Le nettoyage prend plus de temps que prévu...";
+                statusElement.style.display = "block";
+            }, 5000); // Timeout après 5 secondes
+
+            chrome.runtime.sendMessage({ action: "cleanNow" }, (response) => {
+                clearTimeout(timeout); // Annuler le timeout si la réponse arrive
+                loadingElement.style.display = "none"; // Masquer le chargement
+
+                if (response && response.success) {
+                    statusElement.className = "status success";
+                    statusElement.innerHTML = `Nettoyage terminé ! Traces nettoyées : ${response.cleanedTraces}`;
+                } else {
+                    statusElement.className = "status warning";
+                    statusElement.innerHTML = `Erreur lors du nettoyage : ${response ? response.error : "Erreur inconnue"}`;
+                }
+                statusElement.style.display = "block";
+            });
+        });
+    </script>
 </body>
 </html>
