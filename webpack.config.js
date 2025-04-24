@@ -5,7 +5,8 @@ module.exports = {
   mode: 'development',
   entry: {
     'background/secure-background': './src/background/secure-background.js',
-    'popup/popup': './src/popup/popup.js'
+    'popup/popup': './src/popup/popup.js',
+    'options/options': './src/options/options.js'
   },
   output: {
     filename: '[name].js',
@@ -42,13 +43,21 @@ module.exports = {
           to: "popup/popup.css"
         },
         {
+          from: "src/options/options.html",
+          to: "options/options.html"
+        },
+        {
           from: "src/icons",
           to: "icons/"
         },
-        // Ajoutez également le fichier CSS du contenu si vous en avez besoin
         {
           from: "src/content/content.css",
           to: "content/content.css",
+          noErrorOnMissing: true
+        },
+        {
+          from: "src/content/content.js",
+          to: "content/content.js",
           noErrorOnMissing: true
         }
       ],

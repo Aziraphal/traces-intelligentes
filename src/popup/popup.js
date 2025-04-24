@@ -111,10 +111,17 @@ class PopupManager {
 
     // Gère l'ouverture des paramètres
     handleSettings() {
-        if (chrome.runtime.openOptionsPage) {
-            chrome.runtime.openOptionsPage();
-        } else {
-            this.showStatus('Paramètres non disponibles', 'warning');
+        try {
+            if (chrome.runtime.openOptionsPage) {
+                chrome.runtime.openOptionsPage();
+            } else {
+                // Méthode alternative si openOptionsPage n'est pas disponible
+                const optionsUrl = chrome.runtime.getURL('options/options.html');
+                chrome.tabs.create({ url: optionsUrl });
+            }
+        } catch (error) {
+            console.error("Erreur lors de l'ouverture des paramètres:", error);
+            this.showStatus('Paramètres non disponibles. Assurez-vous que le fichier options.html existe.', 'warning');
         }
     }
 
