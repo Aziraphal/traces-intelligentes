@@ -12,7 +12,7 @@ class PopupManager {
         this.statsButton = document.getElementById('viewStats');
         this.settingsButton = document.getElementById('settings');
         this.statusDiv = document.getElementById('status');
-        this.loadingDiv = document.getElementById('loading'); // Ajout du chargement
+        this.loadingDiv = document.getElementById('loading');
         this.protectedSitesSpan = document.getElementById('protectedSites');
         this.cleanedTracesSpan = document.getElementById('cleanedTraces');
     }
@@ -21,7 +21,9 @@ class PopupManager {
     attachEventListeners() {
         this.cleanButton.addEventListener('click', () => this.handleClean());
         this.statsButton.addEventListener('click', () => this.handleViewStats());
-        this.settingsButton.addEventListener('click', () => this.handleSettings());
+        if (this.settingsButton) {
+            this.settingsButton.addEventListener('click', () => this.handleSettings());
+        }
     }
 
     // Charge les statistiques depuis le stockage
@@ -97,6 +99,8 @@ class PopupManager {
                         ${result.lastCleanup ? `<p>Dernier nettoyage : ${new Date(result.lastCleanup).toLocaleString()}</p>` : ''}
                     </div>
                 `;
+                this.statusDiv.className = 'status info';
+                this.statusDiv.style.display = "block";
             } else {
                 throw new Error('Pas de statistiques disponibles');
             }

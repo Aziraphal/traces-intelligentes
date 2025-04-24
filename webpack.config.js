@@ -38,8 +38,18 @@ module.exports = {
           to: "popup/popup.html"
         },
         {
-          from: "src/icons", // Copier tous les fichiers d'icônes
+          from: "src/popup/popup.css",
+          to: "popup/popup.css"
+        },
+        {
+          from: "src/icons",
           to: "icons/"
+        },
+        // Ajoutez également le fichier CSS du contenu si vous en avez besoin
+        {
+          from: "src/content/content.css",
+          to: "content/content.css",
+          noErrorOnMissing: true
         }
       ],
     }),
